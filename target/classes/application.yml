@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driverClassName:  org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/merukariVer2
+    username: postgres
+    password: postgres
+  thymeleaf:
+    cache: false
