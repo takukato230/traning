@@ -71,7 +71,7 @@ public class CategoryRepository {
 	 * @return　List<Category>
 	 */
 	public List<Category> findNameAllSplit2ByName(Integer id){
-		String sql = "select distinct name, id from category where parent = :id";
+		String sql = "select name, id from category where parent = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<Category> nameList = template.query(sql, param, categoryNameAllRowMapper);
 		return nameList;
@@ -83,11 +83,26 @@ public class CategoryRepository {
 	 * @return　List<Category>
 	 */
 	public List<Category> findNameAllSplit3ByName(Integer id){
-		String sql = "select distinct name, id from category where parent = :id";
+		String sql = "select name, id from category where parent = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<Category> nameList = template.query(sql, param, categoryNameAllRowMapper);
 		return nameList;
 	}
 	
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/	
+	
+	public List<Category> findNameAllSplit2ForNameAll(String name){
+		String sql = "select split_part(name_all, '/', 2 ) as name, id from category where split_part(name_all, '/', 1 ) like :name";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name+"%");
+		List<Category> nameList = template.query(sql,param, categoryNameAllRowMapper);
+		return nameList;
+	}
+	
+	public List<Category> findNameAllSplit3ForNameAll(String name){
+		String sql = "select (split_part(name_all, '/', 3 )|| split_part(name_all, '/', 4 )|| split_part(name_all, '/', 5 )) as name, id from category where split_part(name_all, '/', 2 ) like :name";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name","%"+name+"%");
+		List<Category> nameList = template.query(sql,param, categoryNameAllRowMapper);
+		return nameList;
+	}
 
 }

@@ -130,8 +130,63 @@ public class ItemService {
 		return nameArray;
 	}
 	
-	public List<Item> findItemByNameAndCategoryAndBrand(String name, Integer category, String brand){
-		return itemRepository.findItemByNameAndCategoryAndBrand(name, category, brand);
+	/**
+	 * name,category(String),brandの検索メソッド
+	 * @param name
+	 * @param category
+	 * @param brand
+	 * @return
+	 */
+	public List<Item> findItemByNameAndCategoryOnStringAndBrand1(String name, String category, String brand){
+		return itemRepository.findItemByNameAndCategoryOnStringAndBrand1(name, category, brand);
+	}
+	public List<Item> findItemByNameAndCategoryOnStringAndBrand2(String name, String category, String brand){
+		return itemRepository.findItemByNameAndCategoryOnStringAndBrand2(name, category, brand);
+	}
+	public List<Item> findItemByNameAndCategoryOnIntegerAndBrand(String name, Integer category, String brand){
+		return itemRepository.findItemByNameAndCategoryOnIntegerAndBrand(name, category, brand);
+	}
+	
+	public List<Item> findItemByNameAndCategoryOnString1(String name, String category){
+		return itemRepository.findItemByNameAndCategoryOnString1(name, category);
+	}
+	public List<Item> findItemByNameAndCategoryOnString2(String name, String category){
+		return itemRepository.findItemByNameAndCategoryOnString2(name, category);
+	}
+	public List<Item> findItemByNameAndCategoryOnInteger(String name, Integer category){
+		return itemRepository.findItemByNameAndCategory(name, category);
+	}
+	
+	public List<Item> findItemByNameAndBrand(String name, String brand){
+		return itemRepository.findItemByNameAndBrand(name, brand);
+	}
+	
+	public List<Item> findItemByCategoryOnStringAndBrand1(String category, String brand){
+		return itemRepository.findItemByCategoryOnStringAndBrand1(category, brand);
+	}
+	public List<Item> findItemByCategoryOnStringAndBrand2(String category, String brand){
+		return itemRepository.findItemByCategoryOnStringAndBrand2(category, brand);
+	}
+	public List<Item> findItemByCategoryOnIntegerAndBrand(Integer category, String brand){
+		return itemRepository.findItemByCategoryAndBrand(category, brand);
+	}
+	
+	public List<Item> findItemByName(String name){
+		return itemRepository.findItemByName(name);
+	}
+	
+	public List<Item> findItemByCategoryOnString1(String category){
+		return itemRepository.findItemByCategoryOnString1(category);
+	}
+	public List<Item> findItemByCategoryOnString2(String category){
+		return itemRepository.findItemByCategoryOnString2(category);
+	}
+	public List<Item> findItemByCategoryOnInteger(Integer category){
+		return itemRepository.findItemByCategory(category);
+	}
+	
+	public List<Item> findItemByBrand(String brand){
+		return itemRepository.findItemByBrand(brand);
 	}
 /*-------------------------------------------------------------------------	
 							ajax(categoryクラス)
@@ -161,6 +216,16 @@ public class ItemService {
 	 */
 	public List<Category> findGrandChild(Integer id){
 		return categoryRepository.findNameAllSplit3ByName(id);
+	}
+	
+	
+	
+	public List<Category> findChild(String name){
+		return categoryRepository.findNameAllSplit2ForNameAll(name);
+	}
+	
+	public List<Category> findGrandChild(String name){
+		return categoryRepository.findNameAllSplit3ForNameAll(name);
 	}
 	
 	/**

@@ -1,6 +1,5 @@
 package jp.co.rakus.merucariTraining.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -92,7 +91,7 @@ public class ItemRepository {
 		item.setPrice(rs.getInt("price"));
 		item.setShipping(rs.getInt("shipping"));
 		item.setDescription(rs.getString("description"));
-		item.setCount(rs.getInt("count"));
+/*		item.setCount(rs.getInt("count"));*/
 		item.setCategories(category);
 		return item;// itemにセットする値はselect文に記載されたもののみ
 	};
@@ -124,7 +123,7 @@ public class ItemRepository {
 	}
 
 	/**
-	 * itemのidのみを全て取得する
+	 * itemのidのみを全て取得する count使う
 	 * 
 	 * @return
 	 */
@@ -237,26 +236,26 @@ public class ItemRepository {
 	 * @param brand
 	 * @return
 	 */
-	public List<Item> findItemByNameAndCategoryAndBrandOnStringOf(String name, String category, String brand) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
-				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all = :category, i.brand = :brand order by i.id desc";
+	public List<Item> findItemByNameAndCategoryOnStringAndBrand1(String name, String category, String brand) {	
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all like :category and i.brand = :brand order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("category", category+"%").addValue("brand",
 				brand);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
 		return itemList;
 	}
 	
-	public List<Item> findItemByNameAndCategoryAndBrandOnString(String name, String category, String brand) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
-				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all = :category, i.brand = :brand order by i.id desc";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("category", category+"%").addValue("brand",
+	public List<Item> findItemByNameAndCategoryOnStringAndBrand2(String name, String category, String brand) {	
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all like :category and i.brand = :brand order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("category", "%"+category+"%").addValue("brand",
 				brand);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
 		return itemList;
 	}
-	public List<Item> findItemByNameAndCategoryAndBrand(String name, Integer category, String brand) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
-				+ " from items as i join category as c on i.category = c.id where i.name like :name and i.category = :category, i.brand = :brand order by i.id desc";
+	public List<Item> findItemByNameAndCategoryOnIntegerAndBrand(String name, Integer category, String brand) {	
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where i.name like :name and i.category = :category and i.brand = :brand order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("category", category).addValue("brand",
 				brand);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
@@ -268,8 +267,24 @@ public class ItemRepository {
 	 * @param brand
 	 * @return
 	 */
+	public List<Item> findItemByCategoryOnStringAndBrand1(String category, String brand) {	
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where c.name_all like :category and i.brand = :brand order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("category", category+"%").addValue("brand",
+				brand);
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
+	public List<Item> findItemByCategoryOnStringAndBrand2(String category, String brand) {	
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where c.name_all like :category and i.brand = :brand order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("category", "%"+category+"%").addValue("brand",
+				brand);
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
 	public List<Item> findItemByCategoryAndBrand(Integer category, String brand) {	
-			String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+			String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 					+ " from items as i join category as c on i.category = c.id where i.category = :category and i.brand = :brand order by i.id desc";
 			SqlParameterSource param = new MapSqlParameterSource().addValue("category", category).addValue("brand",
 					brand);
@@ -283,7 +298,7 @@ public class ItemRepository {
 	 * @return
 	 */
 	public List<Item> findItemByNameAndBrand(String name, String brand) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id where i.name like :name and i.brand = :brand order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("brand",
 				brand);
@@ -291,26 +306,43 @@ public class ItemRepository {
 		return itemList;
 	}
 	/**
-	 * name,categoryで検索をかけitemを探す
+	 * name,categoryで検索をかけitemを探す ※後からwhere句のみつける
 	 * @param name
 	 * @param category
 	 * @return
 	 */
+	public List<Item> findItemByNameAndCategoryOnString1(String name, String category) {	
+		String sql = "select  i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all like :category order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name + "%")
+				.addValue("category", category+"%");
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
+	public List<Item> findItemByNameAndCategoryOnString2(String name, String category) {	
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where i.name like :name and c.name_all like :category order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%")
+				.addValue("category", "%"+category+"%");
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
 	public List<Item> findItemByNameAndCategory(String name, Integer category) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id where i.name like :name and i.category = :category order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%")
 				.addValue("category", category);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
 		return itemList;
 	}
+
 	/**
 	 * nameで検索をかけitemを探す
 	 * @param name
 	 * @return
 	 */
 	public List<Item> findItemByName(String name) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id where i.name like :name order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
@@ -321,8 +353,22 @@ public class ItemRepository {
 	 * @param category
 	 * @return
 	 */
+	public List<Item> findItemByCategoryOnString1(String category) {	
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where c.name_all like :category order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("category", category+"%");
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
+	public List<Item> findItemByCategoryOnString2(String category) {	
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+				+ " from items as i join category as c on i.category = c.id where c.name_all like :category order by i.id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("category", "%"+category+"%");
+		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
+		return itemList;
+	}
 	public List<Item> findItemByCategory(Integer category) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id where i.category = :category order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("category", category);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);
@@ -333,8 +379,8 @@ public class ItemRepository {
 	 * @param brand
 	 * @return
 	 */
-	public List<Item> findItemByCategory(String brand) {	
-		String sql = "select count(i.id), i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
+	public List<Item> findItemByBrand(String brand) {	
+		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id where i.brand = :brand order by i.id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("brand",brand);
 		List<Item> itemList = template.query(sql, param, searchItemListRowMapper);

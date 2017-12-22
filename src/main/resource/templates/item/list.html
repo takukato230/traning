@@ -65,18 +65,19 @@
 
 		<!-- 検索フォーム -->
 		<div id="forms">
-			<form action="" class="form-inline" role="form">
+			<form action="/searchItem" class="form-inline" role="form">
+			<p th:text="${errorMessage}"></p>
 				<div class="form-group">
-					<input type="text" class="form-control" id="name"
+					<input type="text" class="form-control" name="name" id="name"
 						placeholder="item name" />
 				</div>
 				<div class="form-group">
 					<i class="fa fa-plus"></i>
 				</div>
 				<div class="form-group">
-					<select class="form-control" id="categoryOfParent">
-					</select> <select class="form-control" id="categoryOfChild">
-					</select> <select class="form-control" id="categoryOfGrandChild">
+					<select class="form-control" id="categoryOfParent" name="parant">
+					</select> <select class="form-control" id="categoryOfChild" name="child">
+					</select> <select class="form-control" id="categoryOfGrandChild" name="grandChild">
 					</select>
 				</div>
 				<div class="form-group">
@@ -84,7 +85,7 @@
 				</div>
 				<div class="form-group">
 						<input type="text" class="form-control" id="brandSearch"
-						placeholder="brand" />
+						placeholder="brand" name="brand" />
 				</div>
 				<div class="form-group"></div>
 				<button type="submit" class="btn btn-default">

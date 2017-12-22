@@ -84,4 +84,20 @@ public class AjaxController {
 		String[] nameArray = itemService.createArrayForAutocompleteOfName();
 		return nameArray;
 	}
+	
+	@RequestMapping("/searchCategoryNameSplit2")
+	@ResponseBody
+	public List<Category> searchCategoryNameSplit2(String name){
+		System.out.println("子要素検索カテゴリーの名前は？？"+name);
+		List<Category> categoryName = itemService.findChild(name);
+		System.out.println("子要素のリストサイズは？？"+categoryName.size());
+		return categoryName;
+	}
+	
+	@RequestMapping("/searchCategoryNameSplit3")
+	@ResponseBody
+	public List<Category> searchCategoryNameSplit3(String name){
+		List<Category> categoryName = itemService.findGrandChild(name);
+		return categoryName;
+	}
 }

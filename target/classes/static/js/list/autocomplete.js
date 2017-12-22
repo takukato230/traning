@@ -4,7 +4,7 @@
 /*-------------------------------------------------------------------------------
 							name
 --------------------------------------------------------------------------------*/
- $(function() {
+/*  $(function() {
 	$.ajax({
 		url : "http://localhost:8080/ajax/autocompleteOfName",
 		dataType : "json",
@@ -19,7 +19,7 @@
 			collapsible: true
 		});
 	})
-}); 
+});  */
 
 /* -------------------------------------------------------------------------------
                                 category
@@ -31,39 +31,40 @@ $(function () {
         type: 'GET'
     }).then(function (categoryName) {
         console.log(categoryName.length)
+        $('#categoryOfParent').append("<option value=''>【parent category】please choise!!</option>")
         categoryName.forEach(name => {
             console.log('カテゴリーid:'+name.id)
-            $('#categoryOfParent').append("<option value=" + name.id + ">" + name.name + "</option>")
+            $('#categoryOfParent').append("<option value=" + name.name + ">" + name.name + "</option>")
         })
     })
 })
 $(function () {
     $('#categoryOfParent').change(function () {
-        $('#categoryOfChild').html("<option value='null' style ='color:red'>【child category】please choise!!</option>")
+        $('#categoryOfChild').html("<option value='' style ='color:red'>【child category】please choise!!</option>")
         var nameOfCategory = $('#categoryOfParent').val();
         console.log('parantのid:'+nameOfCategory)
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/ajax/autocompleteOfChild?id=" + nameOfCategory,
+            url: "http://localhost:8080/ajax/searchCategoryNameSplit2?name=" + nameOfCategory,
             dataType: "json" //配列を受取る場合はjson型を指定する。textだと配列が一つの文字列として認識されてしまう。
         }).then(function (categoryName) {
             console.log(categoryName.length)
             $.each(categoryName, function (index, val) {
                 console.log('childName:'+val.name)
                 console.log('childId:'+val.id)
-                $('#categoryOfChild').append("<option value=" + val.id + " class='childOption'>" + val.name + "</option>")
+                $('#categoryOfChild').append("<option value="+val.name+" class='childOption'>" + val.name + "</option>")
             })
         })
     })
 })
 $(function () {
     $('#categoryOfChild').change(function () {
-        $('#categoryOfGrandChild').html("<option value='null' style ='color:red'>【grandchild category】please choise!!</option>")
+        $('#categoryOfGrandChild').html("<option value= '' style ='color:red'>【grandchild category】please choise!!</option>")
         var nameOfCategory = $('#categoryOfChild').val();
         console.log('childのID：'+ nameOfCategory)
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/ajax/autocompleteOfChild?id=" + nameOfCategory,
+            url: "http://localhost:8080/ajax/searchCategoryNameSplit3?name=" + nameOfCategory,
             dataType: "text"//もしtextで配列を受取りたい場合は後でjson.parse()をする必要がある
         }).then(function (categoryName) {
             //下記も比較的新しいループのやり方
