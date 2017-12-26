@@ -5,7 +5,7 @@ public class SearchItemForm {
 	private String name;
 	private String parant;
 	private String child;
-	private Integer grandChild;
+	private String grandChild;
 	private String brand;
 	public String getName() {
 		return name;
@@ -25,10 +25,10 @@ public class SearchItemForm {
 	public void setChild(String child) {
 		this.child = child;
 	}
-	public Integer getGrandChild() {
+	public String getGrandChild() {
 		return grandChild;
 	}
-	public void setGrandChild(Integer grandChild) {
+	public void setGrandChild(String grandChild) {
 		this.grandChild = grandChild;
 	}
 	public String getBrand() {
@@ -37,7 +37,5 @@ public class SearchItemForm {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	
-	
 
 }

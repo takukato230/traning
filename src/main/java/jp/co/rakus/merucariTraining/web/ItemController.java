@@ -1,5 +1,6 @@
 package jp.co.rakus.merucariTraining.web;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,92 +107,136 @@ public class ItemController {
 		return "/itemEdit/add";
 	}
 
-	@RequestMapping(value="/searchItem")
+	@RequestMapping(value = "/searchItem")
 	public String searchItem(SearchItemForm form, Model model, String pageValue) {
+		System.out.println("親～～～～"+form.getParant());
 		List<Item> itemList = new ArrayList<>();
 		String name = form.getName();
-		String parent = form.getParant();
-		String child = form.getChild();
-		Integer grandChild = form.getGrandChild();
 		String brand = form.getBrand();
-		System.out.println("名前に値入ってたりする？？"+name);
-		System.out.println("そもそも親はいる？？"+ parent);
-		System.out.println("そもそも親はいるVer2？？"+ form.getParant());
-			if(child=="" && grandChild==null) {
-				if(name=="") {
-					if(brand=="") {
-						System.out.println("メソッドチェック【１】");
-						itemList = itemService.findItemByCategoryOnString1(parent);
-					}else {
-						System.out.println("メソッドチェック【２】");
-						itemList = itemService.findItemByCategoryOnStringAndBrand1(parent, brand);
+		String parent ;
+		String child;
+		Integer grandChild;
+		if(form.getParant()==null) {
+			parent="";
+		}else {
+			parent = form.getParant();
+		}
+		
+		if(form.getChild()==null) {
+			child = "";
+		}else {
+			child = form.getChild();
+		}
+		
+		if(form.getGrandChild()==null) {
+			grandChild=0;
+		}else {
+			grandChild = Integer.parseInt(form.getGrandChild());
+		}
+		/*String child = null;
+		Integer grandChild = null;
+		try {
+			parent = form.getParant();
+			child = form.getChild();
+			grandChild = Integer.parseInt(form.getGrandChild());
+			System.out.println(form.getGrandChild());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}*/
+
+		
+		System.out.println("名前に値入ってたりする？？" + name);
+		System.out.println("ブランドは入っている？？" + brand);
+		System.out.println("parentには何入るんだろ？？" + parent);
+		System.out.println("てか親は"+form.getParant());
+		System.out.println("子はなんなの？？" + form.getChild());
+		System.out.println("childには何入ってるの？？" + child);
+		System.out.println("孫には何入ってるの？？" + form.getGrandChild());
+		System.out.println("grandChildの変数には何入ってるの？？" + grandChild);
+		System.out.println("そもそも親はいるVer2？？" + form.getParant());
+		if (form.getGrandChild() == null) {
+			if (form.getChild()== null) {
+				if (form.getParant() == null) {
+					if (name == "") {
+						if (brand == "") {
+							System.out.println("エラーになってない？？");
+							model.addAttribute("errorMessage", "検索項目を入力して下さい");
+							return index(pageValue, model);
+						} else {
+							System.out.println("メソッドチェック【５】");
+							itemList = itemService.findItemByBrand(brand);
+						}
+					} else {
+						if (brand == "") {
+							System.out.println("メソッドチェック【新規2：名前のみ】");
+							itemList = itemService.findItemByName(name);
+						} else {
+							System.out.println("メソッドチェック【１０】");
+							itemList = itemService.findItemByNameAndBrand(name, brand);
+						}
 					}
-				}else if(brand==""){
-					System.out.println("メソッドチェック【３】");
-					itemList = itemService.findItemByNameAndCategoryOnString1(name, parent);
-				}else {
-					System.out.println("メソッドチェック【４】");
-					itemList = itemService.findItemByNameAndCategoryOnStringAndBrand1(name, parent, brand);
-				}
-			}else if(child=="" && grandChild==null) {
-				if(name=="") {
-					if(brand=="") {
-						System.out.println("エラーになってない？？");
-						model.addAttribute("errorMessage", "検索項目を入力して下さい");
-						return index(pageValue,model);
-					}else {
-						System.out.println("メソッドチェック【５】");
-						itemList = itemService.findItemByBrand(brand);
+				}else /*if(form.getParant()!=null) */{
+					if (name == "") {
+						if (brand == "") {
+							System.out.println("メソッドチェック【１】親だけはここに来て！！");
+							itemList = itemService.findItemByCategoryOnString1(form.getParant());
+						} else {
+							System.out.println("メソッドチェック【２】");
+							itemList = itemService.findItemByCategoryOnStringAndBrand1(form.getParant(), brand);
+						}
+					} else {
+						if (brand == "") {
+							System.out.println("メソッドチェック【３】");
+							itemList = itemService.findItemByNameAndCategoryOnString1(name, form.getParant());
+						} else {
+							System.out.println("メソッドチェック【４】");
+							itemList = itemService.findItemByNameAndCategoryOnStringAndBrand1(name, form.getParant(), brand);
+						}
 					}
-					
-				}else {
-					System.out.println("メソッドチェック【６】");
-					itemList = itemService.findItemByNameAndBrand(name, brand);
 				}
-			}else if(child!="" && grandChild==null) {
-				if(name=="") {
-					if(brand=="") {
+			} else /*if(form.getChild()!=null) */{
+				if (name == "") {
+					if (brand == "") {
 						System.out.println("メソッドチェック【７】");
-						itemList = itemService.findItemByCategoryOnString1(parent);
-					}else {
+						itemList = itemService.findItemByCategoryOnString2(form.getChild());
+					} else {
 						System.out.println("メソッドチェック【８】");
-						itemList = itemService.findItemByBrand(brand);
+						itemList = itemService.findItemByCategoryOnStringAndBrand2(form.getChild(), brand);
 					}
-				}else {
-					if(brand=="") {
+				} else {
+					if (brand == "") {
 						System.out.println("メソッドチェック【９】");
-						itemList = itemService.findItemByName(name);
-					}else {
-						System.out.println("メソッドチェック【１０】");
-						itemList = itemService.findItemByNameAndCategoryOnStringAndBrand2(name, child, brand);
+						itemList = itemService.findItemByNameAndCategoryOnString2(name, form.getChild());
+					} else {
+						System.out.println("メソッドチェック新規【３】名、子、ブランド");
+						itemList = itemService.findItemByNameAndCategoryOnStringAndBrand2(name, form.getChild(), brand);
 					}
 				}
-			}else if(grandChild!= null ) {
-				if(name == "") {
-					if(brand=="") {
-						System.out.println("メソッドチェック【１１】");
-						itemList = itemService.findItemByCategoryOnInteger(grandChild);
-					}else {
-						System.out.println("メソッドチェック【１２】");
-						itemList = itemService.findItemByCategoryOnIntegerAndBrand(grandChild, brand);
-					}
-				}else {
-					if(brand=="") {
-						System.out.println("メソッドチェック【１３】");
-						itemList = itemService.findItemByNameAndCategoryOnInteger(name, grandChild);
-					}else {
-						System.out.println("メソッドチェック【１４】");
-						itemList = itemService.findItemByNameAndCategoryOnIntegerAndBrand(name, grandChild, brand);
-					}
-				}
-			}else {
-				System.out.println("メソッドチェック【１５】");
-				itemList = itemService.findItemByNameAndCategoryOnIntegerAndBrand(name, grandChild, brand);
 			}
-		System.out.println("検索値チェックnullになってない？？："+itemList.size());
+		} else /*if(form.getGrandChild()!=null) */{
+			if (name == "") {
+				if (brand == "") {
+					System.out.println("メソッドチェック【１１】");
+					itemList = itemService.findItemByCategoryOnInteger(grandChild);
+				} else {
+					System.out.println("メソッドチェック【１２】");
+					itemList = itemService.findItemByCategoryOnIntegerAndBrand(grandChild, brand);
+				}
+			} else {
+				if (brand == "") {
+					System.out.println("メソッドチェック【１３】");
+					itemList = itemService.findItemByNameAndCategoryOnInteger(name, grandChild);
+				} else {
+					System.out.println("メソッドチェック【１４】");
+					itemList = itemService.findItemByNameAndCategoryOnIntegerAndBrand(name, grandChild, brand);
+				}
+			}
+		}
+		System.out.println("検索値チェックnullになってない？？：" + itemList.size());
 		model.addAttribute("itemList", itemList);
 		session.setAttribute("page", 1);
 		return "/item/list";
+
 	}
 
 	/*-----------------------------------------------------------------------	

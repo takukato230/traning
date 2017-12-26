@@ -31,7 +31,7 @@ $(function () {
         type: 'GET'
     }).then(function (categoryName) {
         console.log(categoryName.length)
-        $('#categoryOfParent').append("<option value=''>【parent category】please choise!!</option>")
+        $('#categoryOfParent').html("<option value= 'null'>【parent category】please choise!!</option>")
         categoryName.forEach(name => {
             console.log('カテゴリーid:'+name.id)
             $('#categoryOfParent').append("<option value=" + name.name + ">" + name.name + "</option>")
@@ -40,7 +40,7 @@ $(function () {
 })
 $(function () {
     $('#categoryOfParent').change(function () {
-        $('#categoryOfChild').html("<option value='' style ='color:red'>【child category】please choise!!</option>")
+        $('#categoryOfChild').html("<option value= 'null' style ='color:red'>【child category】please choise!!</option>")
         var nameOfCategory = $('#categoryOfParent').val();
         console.log('parantのid:'+nameOfCategory)
         $.ajax({
@@ -59,7 +59,7 @@ $(function () {
 })
 $(function () {
     $('#categoryOfChild').change(function () {
-        $('#categoryOfGrandChild').html("<option value= '' style ='color:red'>【grandchild category】please choise!!</option>")
+        $('#categoryOfGrandChild').html("<option value= 'null' style ='color:red'>【grandchild category】please choise!!</option>")
         var nameOfCategory = $('#categoryOfChild').val();
         console.log('childのID：'+ nameOfCategory)
         $.ajax({

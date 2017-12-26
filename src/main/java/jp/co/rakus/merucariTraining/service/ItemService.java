@@ -80,11 +80,11 @@ public class ItemService {
 	 * @param nameOfGrandChild
 	 * @return　Integer(itemsテーブルのcategory)
 	 */
-	public Integer findCategoryFromItemByCategoryName(String nameOfParent, String nameOfChild, String nameOfGrandChild) {
+	/*public Integer findCategoryFromItemByCategoryName(String nameOfParent, String nameOfChild, String nameOfGrandChild) {
 		String nameAll = nameOfParent+"||"+nameOfChild+"||"+nameOfGrandChild;
 		Integer category = itemRepository.findItemCategoryByCategoryName(nameAll);
 		return category;
-	}
+	}*/
 	
 	/**
 	 * ３つの文字列をInteger型に変換する
@@ -93,11 +93,11 @@ public class ItemService {
 	 * @param grandChild String
 	 * @return Integer (itemsのcategory)
 	 */
-	public Integer changeCategory(String parent, String child, String grandChild) {
+	/*public Integer changeCategory(String parent, String child, String grandChild) {
 		String categoryName = parent+"/"+child+"/"+grandChild;
 		Integer id = itemRepository.findItemCategoryByCategoryName(categoryName);
 		return id;
-	}
+	}*/
 	
 	/**
 	 * itemのinsert
@@ -121,7 +121,7 @@ public class ItemService {
 	 * itemの名前を全て取り配列に変換する
 	 * @return　
 	 */
-	public String[] createArrayForAutocompleteOfName(){
+/*	public String[] createArrayForAutocompleteOfName(){
 		List<Item> itemList = itemRepository.findItemNameAll();
 		String[] nameArray = new String[itemList.size()];
 		for (int i = 0; i < nameArray.length; i++) {
@@ -129,7 +129,7 @@ public class ItemService {
 		}
 		return nameArray;
 	}
-	
+	*/
 	/**
 	 * name,category(String),brandの検索メソッド
 	 * @param name
@@ -220,11 +220,17 @@ public class ItemService {
 	
 	
 	
+	/**
+	 * カテゴリーの親要素を引数としてcategoryのリストを返す
+	 * @param name
+	 * @return
+	 */
 	public List<Category> findChild(String name){
 		return categoryRepository.findNameAllSplit2ForNameAll(name);
 	}
 	
 	public List<Category> findGrandChild(String name){
+		System.out.println("子供の名前チェック【junit確認用】:" + name);
 		return categoryRepository.findNameAllSplit3ForNameAll(name);
 	}
 	

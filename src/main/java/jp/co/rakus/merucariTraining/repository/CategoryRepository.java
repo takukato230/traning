@@ -92,7 +92,7 @@ public class CategoryRepository {
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/	
 	
 	public List<Category> findNameAllSplit2ForNameAll(String name){
-		String sql = "select split_part(name_all, '/', 2 ) as name, id from category where split_part(name_all, '/', 1 ) like :name";
+		String sql = "select distinct split_part(name_all, '/', 2 ) as name, id from category where split_part(name_all, '/', 1 ) like :name";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name+"%");
 		List<Category> nameList = template.query(sql,param, categoryNameAllRowMapper);
 		return nameList;

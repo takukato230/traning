@@ -78,12 +78,12 @@ public class AjaxController {
 	 * 商品検索で使用するitem.nameのautocomplete用メッソド
 	 * @return String[]
 	 */
-	@RequestMapping("/autocompleteOfName")
+/*	@RequestMapping("/autocompleteOfName")
 	@ResponseBody
 	public String[] autocompleteOfName() {
 		String[] nameArray = itemService.createArrayForAutocompleteOfName();
 		return nameArray;
-	}
+	}*/
 	
 	@RequestMapping("/searchCategoryNameSplit2")
 	@ResponseBody

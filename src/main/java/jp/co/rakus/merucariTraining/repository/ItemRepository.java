@@ -115,12 +115,12 @@ public class ItemRepository {
 	 * 
 	 * @return
 	 */
-	public List<Item> findItemAll() {
+	/*public List<Item> findItemAll() {
 		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
 				+ " from items as i join category as c on i.category = c.id order by id desc ";
 		List<Item> itemList = template.query(sql, itemListRowMapper);
 		return itemList;
-	}
+	}*/
 
 	/**
 	 * itemのidのみを全て取得する count使う
@@ -153,12 +153,12 @@ public class ItemRepository {
 	 * @param categoryName
 	 * @return
 	 */
-	public Integer findItemCategoryByCategoryName(String categoryName) {
+	/*public Integer findItemCategoryByCategoryName(String categoryName) {
 		String sql = "select distinct i.category from items as i join category as c on i.category = c.id where c.name_all = :name_all";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name_all", categoryName);
 		Integer category = template.queryForObject(sql, param, Integer.class);
 		return category;
-	}
+	}*/
 
 	/**
 	 * ブランドの曖昧検索
@@ -182,12 +182,12 @@ public class ItemRepository {
 	 *            String
 	 * @return Integer
 	 */
-	public Integer findCategoryByCategoryName(String name) {
+	/*public Integer findCategoryByCategoryName(String name) {
 		String sql = "select i.category from items as i join category as c on i.category = c.id where c.name_all = :name";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name);
 		Integer id = template.queryForObject(sql, param, Integer.class);
 		return id;
-	}
+	}*/
 
 	/**
 	 * itemsテーブルのinsert
@@ -221,11 +221,11 @@ public class ItemRepository {
 	 * 
 	 * @return List<Item> itemRepository.findItemNameAll();
 	 */
-	public List<Item> findItemNameAll() {
+	/*public List<Item> findItemNameAll() {
 		String sql = "select name from items where name is not null order by name";
 		List<Item> itemList = template.query(sql, nameOnlyRowMapper);
 		return itemList;
-	}
+	}*/
 /*------------------------------------------------------------------------------------------------------------------------------------	
 													検索をかける
 -------------------------------------------------------------------------------------------------------------------------------------*/
