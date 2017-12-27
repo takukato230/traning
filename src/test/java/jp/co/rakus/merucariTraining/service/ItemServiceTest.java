@@ -26,7 +26,7 @@ public class ItemServiceTest {
 	Integer page = 1;
 	Integer pageValue = 1;
 
-	@Test
+	/*@Test
 	public void test1() {
 		List<Item> itemList = service.displayFirstTime();
 		assertThat(itemList.get(0).getId(), is(1));
@@ -38,7 +38,7 @@ public class ItemServiceTest {
 		List<Item> list = service.findItemByPage(page, pageValue);
 		assertThat(list.get(0).getId(), is(61));
 		assertThat(list.get(29).getId(), is(90));
-	}
+	}*/
 	
 	@Test
 	public void test3() {

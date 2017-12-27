@@ -98,7 +98,7 @@ public class ItemService {
 		Integer id = itemRepository.findItemCategoryByCategoryName(categoryName);
 		return id;
 	}*/
-	
+		
 	/**
 	 * itemのinsert
 	 * @param item
@@ -108,6 +108,14 @@ public class ItemService {
 		return itemRepository.insertItem(item);
 	}
 	
+	/**
+	 * id検索でitemを探し出す
+	 * @param item
+	 * @return
+	 */
+	public Item findItemByIdNew(Integer id) {
+		return itemRepository.findItemByIdNew(id);
+	}
 	/**
 	 * itemのupdate 
 	 * @param item

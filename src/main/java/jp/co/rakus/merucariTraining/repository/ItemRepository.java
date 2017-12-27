@@ -32,19 +32,6 @@ public class ItemRepository {
 		insert = withTableName.usingGeneratedKeyColumns("id");
 	}
 
-	private static final RowMapper<Item> itemRowMapper = (rs, i) -> {
-		Item item = new Item();
-		item.setId(rs.getInt("id"));
-		item.setName(rs.getString("name"));
-		item.setCondition(rs.getInt("condition"));
-		item.setCategory(rs.getInt("category"));
-		item.setBrand(rs.getString("brand"));
-		item.setPrice(rs.getInt("price"));
-		item.setShipping(rs.getInt("shipping"));
-		item.setDescription(rs.getString("description"));
-		return item;
-	};
-
 	private static final RowMapper<Item> itemListRowMapper = (rs, i) -> {
 		Category category = new Category();
 		category.setName(rs.getString("category_name"));
@@ -73,12 +60,6 @@ public class ItemRepository {
 		return item;
 	};
 
-	private static final RowMapper<Item> nameOnlyRowMapper = (rs, i) -> {
-		Item item = new Item();
-		item.setName(rs.getString("name"));
-		return item;
-	};
-
 	private static final RowMapper<Item> searchItemListRowMapper = (rs, i) -> {
 		Category category = new Category();
 		category.setName(rs.getString("category_name"));
@@ -86,14 +67,34 @@ public class ItemRepository {
 		item.setId(rs.getInt("id"));
 		item.setName(rs.getString("name"));
 		item.setCondition(rs.getInt("condition"));
-		/* item.setCategory(rs.getInt("category")); */
 		item.setBrand(rs.getString("brand"));
 		item.setPrice(rs.getInt("price"));
 		item.setShipping(rs.getInt("shipping"));
 		item.setDescription(rs.getString("description"));
-/*		item.setCount(rs.getInt("count"));*/
 		item.setCategories(category);
 		return item;// itemにセットする値はselect文に記載されたもののみ
+	};
+	
+	private static final RowMapper<Item> itemListInculudeCategoryEachNameRowMapper = (rs, i) ->{
+		Item item = new Item();
+		Category category = new Category();
+		category.setParentId(rs.getInt("parent_id"));
+		category.setParentName(rs.getString("parent_name"));
+		category.setChildId(rs.getInt("child_id"));
+		category.setChildName(rs.getString("child_name"));
+		category.setGrandChildId(rs.getInt("grandChild_id"));
+		category.setGrandChildName(rs.getString("grandChild_name"));
+		
+		item.setId(rs.getInt("id"));
+		item.setName(rs.getString("name"));
+		item.setCondition(rs.getInt("condition"));
+		item.setBrand(rs.getString("brand"));
+		item.setPrice(rs.getInt("price"));
+		item.setShipping(rs.getInt("shipping"));
+		item.setDescription(rs.getString("description"));
+		item.setCategories(category);
+		
+		return item;
 	};
 
 	/**
@@ -110,17 +111,7 @@ public class ItemRepository {
 		return itemList;
 	}
 
-	/**
-	 * itemを全て取得する
-	 * 
-	 * @return
-	 */
-	/*public List<Item> findItemAll() {
-		String sql = "select i.id, i.name, i.condition, c.name as category_name, i.brand, i.price, i.shipping, i.description"
-				+ " from items as i join category as c on i.category = c.id order by id desc ";
-		List<Item> itemList = template.query(sql, itemListRowMapper);
-		return itemList;
-	}*/
+
 
 	/**
 	 * itemのidのみを全て取得する count使う
@@ -146,19 +137,26 @@ public class ItemRepository {
 		Item item = template.queryForObject(sql, param, itemListRowMapper);
 		return item;
 	}
-
+	
 	/**
-	 * categoryのname_allからitemsのcategoryを探し出してくる
-	 * 
-	 * @param categoryName
-	 * @return
+	 * id検索でitemを探す　更新版
+	 * @param id
+	 * @return　Item
 	 */
-	/*public Integer findItemCategoryByCategoryName(String categoryName) {
-		String sql = "select distinct i.category from items as i join category as c on i.category = c.id where c.name_all = :name_all";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name_all", categoryName);
-		Integer category = template.queryForObject(sql, param, Integer.class);
-		return category;
-	}*/
+	public Item findItemByIdNew(Integer id) {
+		String sql = "select i.id, i.name, i.condition, c3.name as parent_name, c3.id as parent_id, "
+				+ "c2.name as child_name, c2.id as child_id, "
+				+ "c1.name as grandchild_name, c1.id as grandchild_id, "
+				+ "i.brand, i.price, i.shipping, i.description " + 
+				" from items as i join category as c1 on i.category = c1.id "
+				+ "join category as c2 on c1.parent = c2.id "
+				+ "join category as c3 on c2.parent = c3.id "
+				+ "where i.id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		Item item = template.queryForObject(sql, param, itemListInculudeCategoryEachNameRowMapper);
+		return item;
+	}
+
 
 	/**
 	 * ブランドの曖昧検索
@@ -175,19 +173,6 @@ public class ItemRepository {
 		return brandList;
 	}
 
-	/**
-	 * categoryNameで検索をかけcategoryを拾ってくる
-	 * 
-	 * @param name
-	 *            String
-	 * @return Integer
-	 */
-	/*public Integer findCategoryByCategoryName(String name) {
-		String sql = "select i.category from items as i join category as c on i.category = c.id where c.name_all = :name";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name);
-		Integer id = template.queryForObject(sql, param, Integer.class);
-		return id;
-	}*/
 
 	/**
 	 * itemsテーブルのinsert
@@ -216,16 +201,6 @@ public class ItemRepository {
 		return item;
 	}
 
-	/**
-	 * itemsテーブルのnameを全て拾う
-	 * 
-	 * @return List<Item> itemRepository.findItemNameAll();
-	 */
-	/*public List<Item> findItemNameAll() {
-		String sql = "select name from items where name is not null order by name";
-		List<Item> itemList = template.query(sql, nameOnlyRowMapper);
-		return itemList;
-	}*/
 /*------------------------------------------------------------------------------------------------------------------------------------	
 													検索をかける
 -------------------------------------------------------------------------------------------------------------------------------------*/

@@ -133,17 +133,6 @@ public class ItemController {
 		}else {
 			grandChild = Integer.parseInt(form.getGrandChild());
 		}
-		/*String child = null;
-		Integer grandChild = null;
-		try {
-			parent = form.getParant();
-			child = form.getChild();
-			grandChild = Integer.parseInt(form.getGrandChild());
-			System.out.println(form.getGrandChild());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}*/
-
 		
 		System.out.println("名前に値入ってたりする？？" + name);
 		System.out.println("ブランドは入っている？？" + brand);
@@ -154,9 +143,9 @@ public class ItemController {
 		System.out.println("孫には何入ってるの？？" + form.getGrandChild());
 		System.out.println("grandChildの変数には何入ってるの？？" + grandChild);
 		System.out.println("そもそも親はいるVer2？？" + form.getParant());
-		if (form.getGrandChild() == null) {
-			if (form.getChild()== null) {
-				if (form.getParant() == null) {
+		if (form.getGrandChild() == null || form.getGrandChild()=="") {
+			if (form.getChild()== null || form.getChild()=="") {
+				if (form.getParant() == null || form.getParant()=="") {
 					if (name == "") {
 						if (brand == "") {
 							System.out.println("エラーになってない？？");
@@ -291,7 +280,7 @@ public class ItemController {
 	 */
 	@RequestMapping(value = "/editItem")
 	public String editItem(ItemEditForm form, Model model) {
-		Item item = itemService.findItembyId(form.getId());
+		Item item = itemService.findItemByIdNew(form.getId());
 		model.addAttribute("item", item);
 		return "/itemEdit/edit";
 	}
@@ -309,10 +298,6 @@ public class ItemController {
 	public String updateItem(@Validated UpdateForm form, BindingResult result, Model model, String pageValue) {
 		System.out.println("ここで値とれている？？商品編集のitemId:" + form.getId());
 		System.out.println("ここで値とれている？？商品編集のitemName:" + form.getName());
-		/*
-		 * if(result.hasErrors()) { model.addAttribute("validationError",
-		 * "不正な値が入力されました。"); return "/itemEdit/edit"; }
-		 */
 		Item item = new Item();
 		BeanUtils.copyProperties(form, item);
 		item.setId(form.getId());

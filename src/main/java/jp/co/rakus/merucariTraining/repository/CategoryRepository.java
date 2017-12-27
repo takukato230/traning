@@ -45,6 +45,27 @@ public class CategoryRepository {
 		return category;
 	};
 	
+	private static final RowMapper<Category> categoryNameDividedParentRowMapper = (rs, i) ->{
+		Category category = new Category();
+		category.setParentId(rs.getInt("parent_id"));
+		category.setParentName(rs.getString("parent_name"));
+		return category;
+	};
+	
+	private static final RowMapper<Category> categoryNameDividedChildRowMapper = (rs, i) ->{
+		Category category = new Category();
+		category.setChildId(rs.getInt("child_id"));
+		category.setChildName(rs.getString("child_name"));
+		return category;
+	};
+	
+	private static final RowMapper<Category> categoryNameDividedGrandChildRowMapper = (rs, i) ->{
+		Category category = new Category();
+		category.setGrandChildId(rs.getInt("grandChild_id"));
+		category.setGrandChildName(rs.getString("grandChild_name"));
+		return category;
+	};
+	
 	/**
 	 * categoryのnameを全て取り出す
 	 * @return
@@ -65,6 +86,12 @@ public class CategoryRepository {
 		return nameList;
 	}
 	
+	public List<Category> findNameAllSplit1ForParent(){
+		String sql = "select name as parent_name, id as parent_id from category where parent is null";
+		List<Category> nameList = template.query(sql, categoryNameDividedParentRowMapper);
+		return nameList;
+	}
+	
 	/**
 	 * nameで検索したsplit区切り２番目のnameをlistで拾う
 	 * @param name　(String)
@@ -77,6 +104,13 @@ public class CategoryRepository {
 		return nameList;
 	}
 	
+	public List<Category> findNameAllSplit2ByNameForChild(Integer id){
+		String sql = "select name as child_name, id as child_id from category where parent = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		List<Category> nameList = template.query(sql, param, categoryNameDividedChildRowMapper);
+		return nameList;
+	}
+	
 	/**
 	 * nameで検索したsplit区切り3,4,5番目のnameをlistで拾う
 	 * @param name　(String)
@@ -86,6 +120,13 @@ public class CategoryRepository {
 		String sql = "select name, id from category where parent = :id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<Category> nameList = template.query(sql, param, categoryNameAllRowMapper);
+		return nameList;
+	}
+	
+	public List<Category> findNameAllSplit3ByNameForGrandChild(Integer id){
+		String sql = "select name as grandChild_name, id as grandChild_id from category where parent = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		List<Category> nameList = template.query(sql, param, categoryNameDividedGrandChildRowMapper);
 		return nameList;
 	}
 	

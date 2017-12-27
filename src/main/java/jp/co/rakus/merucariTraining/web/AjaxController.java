@@ -46,17 +46,7 @@ public class AjaxController {
 		List<Category> itemList = itemService.findChils(id);
 		return itemList;
 	}
-/*	*//**
-	 * autocompleteメソッド（商品追加孫要素検索用）
-	 * @param name　: String
-	 * @return
-	 *//*
-	@ResponseBody
-	@RequestMapping("/autocompleteOfGrandChild")
-	public String[] autocompleteOfGrandChild(Integer id) {
-		String[] categoryName = itemService.createArrayForAutoComplete(itemService.findGrandChild(id));
-		return categoryName;
-	}*/
+
 /*---------------------------------------------------------------------------	
 							商品追加のブランドクラス
 ----------------------------------------------------------------------------*/	
@@ -74,16 +64,7 @@ public class AjaxController {
 /*--------------------------------------------------------------------------------	
 						　	      　商品検索（一覧画面）
 ---------------------------------------------------------------------------------*/
-	/**
-	 * 商品検索で使用するitem.nameのautocomplete用メッソド
-	 * @return String[]
-	 */
-/*	@RequestMapping("/autocompleteOfName")
-	@ResponseBody
-	public String[] autocompleteOfName() {
-		String[] nameArray = itemService.createArrayForAutocompleteOfName();
-		return nameArray;
-	}*/
+
 	
 	@RequestMapping("/searchCategoryNameSplit2")
 	@ResponseBody
