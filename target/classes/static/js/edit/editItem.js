@@ -84,6 +84,6 @@ $(function () {
 ---------------------------------------------------------------------------------------*/
 $(function(){
     var condition = $('#hiddenCondition').val();
-    console.log(condition)
-    $('.inputCondition').val()=condition;
+    console.log("コンディション"+condition)
+    $('.inputCondition').val().checked = condition;
 });
